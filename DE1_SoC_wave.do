@@ -1,15 +1,19 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /stolen_detector_testbench/isStolen
-add wave -noupdate /stolen_detector_testbench/isDiscounted
-add wave -noupdate /stolen_detector_testbench/u
-add wave -noupdate /stolen_detector_testbench/p
-add wave -noupdate /stolen_detector_testbench/c
-add wave -noupdate /stolen_detector_testbench/isMarkPresent
+add wave -noupdate {/DE1_SoC_testbench/SW[7]}
+add wave -noupdate {/DE1_SoC_testbench/SW[6]}
+add wave -noupdate {/DE1_SoC_testbench/SW[5]}
+add wave -noupdate {/DE1_SoC_testbench/SW[4]}
+add wave -noupdate {/DE1_SoC_testbench/SW[3]}
+add wave -noupdate {/DE1_SoC_testbench/SW[2]}
+add wave -noupdate {/DE1_SoC_testbench/SW[1]}
+add wave -noupdate {/DE1_SoC_testbench/SW[0]}
+add wave -noupdate /DE1_SoC_testbench/HEX0
+add wave -noupdate /DE1_SoC_testbench/HEX1
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ps} 0}
 quietly wave cursor active 0
-configure wave -namecolwidth 150
+configure wave -namecolwidth 217
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -23,4 +27,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {2337 ps}
+WaveRestoreZoom {0 ps} {5583 ps}

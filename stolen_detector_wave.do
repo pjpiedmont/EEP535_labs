@@ -1,12 +1,15 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate -expand -group Inputs /signal_equality_checker_testbench/signal0
-add wave -noupdate -expand -group Inputs /signal_equality_checker_testbench/signal1
-add wave -noupdate -expand -group Outputs /signal_equality_checker_testbench/equal
+add wave -noupdate /stolen_detector_testbench/isStolen
+add wave -noupdate /stolen_detector_testbench/isDiscounted
+add wave -noupdate /stolen_detector_testbench/u
+add wave -noupdate /stolen_detector_testbench/p
+add wave -noupdate /stolen_detector_testbench/c
+add wave -noupdate /stolen_detector_testbench/isMarkPresent
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ps} 0}
 quietly wave cursor active 0
-configure wave -namecolwidth 287
+configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -20,4 +23,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {2035 ps}
+WaveRestoreZoom {0 ps} {2337 ps}

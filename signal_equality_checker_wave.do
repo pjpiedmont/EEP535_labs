@@ -1,16 +1,12 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
-add wave -noupdate /mux4_1_testbench/i00
-add wave -noupdate /mux4_1_testbench/i01
-add wave -noupdate /mux4_1_testbench/i10
-add wave -noupdate /mux4_1_testbench/i11
-add wave -noupdate /mux4_1_testbench/sel0
-add wave -noupdate /mux4_1_testbench/sel1
-add wave -noupdate /mux4_1_testbench/out
+add wave -noupdate -expand -group Inputs /signal_equality_checker_testbench/signal0
+add wave -noupdate -expand -group Inputs /signal_equality_checker_testbench/signal1
+add wave -noupdate -expand -group Outputs /signal_equality_checker_testbench/equal
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {272 ps} 0}
-quietly wave cursor active 1
-configure wave -namecolwidth 150
+WaveRestoreCursors {{Cursor 1} {0 ps} 0}
+quietly wave cursor active 0
+configure wave -namecolwidth 287
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -24,4 +20,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {2881 ps}
+WaveRestoreZoom {0 ps} {2035 ps}

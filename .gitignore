@@ -12,6 +12,7 @@ simulation/
 greybox_tmp/
 hc_output/
 hps_isw_handoff/
+work/
 
 # ==========================================
 # Quartus Extensions & Auto-generated Files

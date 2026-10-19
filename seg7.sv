@@ -79,8 +79,8 @@ module seg7_testbench();
 			
 			#10;
 
-			assert (leds ==? test_cases[i].expected_leds) else begin
-				$display("Test failed for digit %0d: expected %b, got %b", digit, test_cases[i].expected_leds, leds);
+			assert (leds === test_cases[i].expected_leds) else begin
+				$error("Test failed for digit %0d: expected %b, got %b", digit, test_cases[i].expected_leds, leds);
 				failure_count++;
 			end
 		end

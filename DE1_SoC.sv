@@ -41,7 +41,7 @@ module DE1_SoC_testbench();
 	localparam int NUM_TEST_CASES = BASE ** 2;
 
 	// Create a lookup table for the 7-segment display so I can programmatically generate the test cases
-	logic [6:0] seg7_lookup[] = '{
+	logic [6:0] seg7_lookup[10] = '{
 		7'b1000000, // 0
 		7'b1111001, // 1
 		7'b0100100, // 2

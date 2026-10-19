@@ -43,16 +43,48 @@ module seg7(
 	end
 endmodule
 
+
+
 module seg7_testbench();
 	logic[3:0] digit;
 	logic[6:0] leds;
 	
 	seg7 dut(.digit, .leds);
-	
+
+	typedef struct {
+		logic[3:0] digit;
+		logic[6:0] expected_leds;
+	} test_case_t;
+
+	localparam int NUM_TEST_CASES = 10;
+
+	test_case_t test_cases[NUM_TEST_CASES] = '{
+		'{4'h0, 7'b1000000},
+		'{4'h1, 7'b1111001},
+		'{4'h2, 7'b0100100},
+		'{4'h3, 7'b0110000},
+		'{4'h4, 7'b0011001},
+		'{4'h5, 7'b0010010},
+		'{4'h6, 7'b0000010},
+		'{4'h7, 7'b1111000},
+		'{4'h8, 7'b0000000},
+		'{4'h9, 7'b0010000}
+	};
+
 	integer i;
+	integer failure_count = 0;
 	initial begin
-		for (i = 0; i < 2 ** 4; i++) begin
-			digit = i; #10;
+		for (i = 0; i < NUM_TEST_CASES; i++) begin
+			digit = test_cases[i].digit;
+			
+			#10;
+
+			assert (leds ==? test_cases[i].expected_leds) else begin
+				$display("Test failed for digit %0d: expected %b, got %b", digit, test_cases[i].expected_leds, leds);
+				failure_count++;
+			end
 		end
+
+		$display("Testbench completed. Failures: %0d", failure_count);
 	end
 endmodule

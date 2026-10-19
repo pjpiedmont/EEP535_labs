@@ -5,6 +5,8 @@
  *
  * Parameters:
  * - WIDTH: The bit width of the digits to be compared.
+ * - DIGIT0: The first digit to compare against (default is 7).
+ * - DIGIT1: The second digit to compare against (default is 9).
  *
  * Inputs:
  * - SW: Switches on the DE-1 SoC board.

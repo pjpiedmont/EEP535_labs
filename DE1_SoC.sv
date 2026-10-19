@@ -15,7 +15,7 @@
  * - LEDR: LEDs on the DE-1 SoC board.
  */
 module DE1_SoC #(
-    parameter WIDTH = 4,
+	parameter WIDTH = 4,
 	// Last two digits of my student ID number: 97
 	parameter DIGIT0 = 7,
 	parameter DIGIT1 = 9
@@ -37,8 +37,8 @@ module DE1_SoC #(
 	assign HEX4 = '1;
 	assign HEX5 = '1;
 
-	assign digit0 = DIGIT0;
-	assign digit1 = DIGIT1;
+	assign digit0 = DIGIT0[WIDTH-1:0];
+	assign digit1 = DIGIT1[WIDTH-1:0];
 
 	assign LEDR[0] = digit0IsEqual && digit1IsEqual;
 

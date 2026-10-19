@@ -15,7 +15,10 @@
  * - LEDR: LEDs on the DE-1 SoC board.
  */
 module DE1_SoC #(
-    parameter WIDTH = 4
+    parameter WIDTH = 4,
+	// Last two digits of my student ID number: 97
+	parameter DIGIT0 = 7,
+	parameter DIGIT1 = 9
 )
 (
 	output logic [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5,
@@ -34,9 +37,8 @@ module DE1_SoC #(
 	assign HEX4 = '1;
 	assign HEX5 = '1;
 
-	// Last two digits of my student ID number: 97
-	assign digit1 = 9;
-	assign digit0 = 7;
+	assign digit0 = DIGIT0;
+	assign digit1 = DIGIT1;
 
 	assign LEDR[0] = digit0IsEqual && digit1IsEqual;
 
@@ -44,20 +46,51 @@ module DE1_SoC #(
 	signal_equality_checker #(.WIDTH(WIDTH)) digit1Comp(.equal(digit1IsEqual), .signal0(SW[7:4]), .signal1(digit1));
 endmodule
 
+
+
 module DE1_SoC_testbench();
-	parameter WIDTH = 4;
+	localparam WIDTH = 4;
+	localparam DIGIT0 = 7;
+	localparam DIGIT1 = 9;
+
+	localparam TOTAL_TEST_CASES = 2 ** (WIDTH * 2);
 
 	logic [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
 	logic [9:0] LEDR;
 	logic [3:0] KEY;
 	logic [9:0] SW;
 
-	DE1_SoC #(.WIDTH(WIDTH)) dut(.HEX0, .HEX1, .HEX2, .HEX3, .HEX4, .HEX5, .KEY, .LEDR, .SW);
+	DE1_SoC #(.WIDTH(WIDTH), .DIGIT0(DIGIT0), .DIGIT1(DIGIT1)) dut(.HEX0, .HEX1, .HEX2, .HEX3, .HEX4, .HEX5, .KEY, .LEDR, .SW);
+
+	typedef struct {
+		logic [WIDTH-1:0] switch_set0;
+		logic [WIDTH-1:0] switch_set1;
+		logic             expected_led;
+	} test_case_t;
+
+	test_case_t test_cases[TOTAL_TEST_CASES];
 
 	integer i;
+	integer failure_count = 0;
 	initial begin
-		for (i = 0; i < 2 ** (WIDTH * 2); i++) begin
-			SW[(WIDTH * 2 - 1):0] = i; #10;
+		for (i = 0; i < TOTAL_TEST_CASES; i++) begin
+			{ test_cases[i].switch_set1, test_cases[i].switch_set0 } = i;
+			test_cases[i].expected_led = ((test_cases[i].switch_set0 == DIGIT0) && (test_cases[i].switch_set1 == DIGIT1));
 		end
+
+		for (i = 0; i < TOTAL_TEST_CASES; i++) begin
+			SW[((WIDTH * 2) - 1):WIDTH] = test_cases[i].switch_set1;
+			SW[(WIDTH - 1):0] = test_cases[i].switch_set0;
+
+			#10;
+
+			assert (LEDR[0] === test_cases[i].expected_led) else begin
+				failure_count++;
+				$error("Test case %0d failed: switch_set0=%b, switch_set1=%b, expected_led=%b, actual_led=%b",
+					i, test_cases[i].switch_set0, test_cases[i].switch_set1, test_cases[i].expected_led, LEDR[0]);
+			end
+		end
+
+		$display("Testbench completed. Failures: %0d", failure_count);
 	end
 endmodule

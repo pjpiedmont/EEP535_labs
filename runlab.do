@@ -4,9 +4,8 @@ vlib work
 # Compile Verilog
 #     All Verilog files that are part of this design should have
 #     their own "vlog" line below.
-vlog "./char_to_seg7.sv"
-vlog "./stolen_detector.sv"
-vlog "./product_display.sv"
+vlog "./simple.sv"
+vlog "./clock_divider.sv"
 vlog "./DE1_SoC.sv"
 
 # Call vsim to invoke simulator

@@ -58,12 +58,12 @@ module DE1_SoC_testbench();
 			repeat(3) @(posedge CLOCK_50);
 
 		// test right to left wind
-		SW[9] <= 0; SW[1:0] <= 2'b01; @(posedge CLOCK_50);
+		SW[9] <= 1; SW[1:0] <= 2'b01; @(posedge CLOCK_50);
 		SW[9] <= 0; @(posedge CLOCK_50);
 			repeat(3) @(posedge CLOCK_50);
 
 		// test left to right wind
-		SW[9] <= 0; SW[1:0] <= 2'b10; @(posedge CLOCK_50);
+		SW[9] <= 1; SW[1:0] <= 2'b10; @(posedge CLOCK_50);
 		SW[9] <= 0; @(posedge CLOCK_50);
 			repeat(3) @(posedge CLOCK_50);
 		

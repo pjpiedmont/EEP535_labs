@@ -62,16 +62,31 @@ module hazard_lights_testbench();
 
 	initial begin
 			@(posedge clk);
+
+		// test pattern when wind is calm
 		reset <= 1; wind <= wind_directions_pkg::CALM; @(posedge clk);
 		reset <= 0; @(posedge clk);
 			@(posedge clk);
 			@(posedge clk);
 			@(posedge clk);
+
+		// test pattern when wind is right to left
+		reset <= 1; wind <= wind_directions_pkg::LEFT; @(posedge clk);
+		reset <= 0; @(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+
+		// test pattern when wind is left to right
+		reset <= 1; wind <= wind_directions_pkg::RIGHT; @(posedge clk);
+		reset <= 0; @(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+
+		// test changing direction in middle of pattern
 		wind <= wind_directions_pkg::LEFT; @(posedge clk);
 			@(posedge clk);
-			@(posedge clk);
-			@(posedge clk);
-		wind <= wind_directions_pkg::RIGHT; @(posedge clk);
 			@(posedge clk);
 			@(posedge clk);
 			@(posedge clk);

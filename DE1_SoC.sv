@@ -22,8 +22,11 @@ module DE1_SoC(
 	// Uncomment ONE of the following two lines depending on intention
 	assign clkSelect = CLOCK_50; // for simulation
 	//assign clkSelect = div_clk[whichClock]; // for board
+	
+	wind_directions_pkg::wind_directions_e wind;
+	assign wind = wind_directions_pkg::wind_directions_e'(SW[1:0]);
 
-	hazard_lights dut (.clk(clkSelect), .reset, .wind(SW[1:0]), .lights(LEDR[2:0]));
+	hazard_lights dut (.clk(clkSelect), .reset, .wind, .lights(LEDR[2:0]));
 endmodule
 
 

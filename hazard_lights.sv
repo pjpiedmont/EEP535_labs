@@ -1,48 +1,81 @@
 module hazard_lights (
-	input  logic       clk,
-	input  logic       reset,
-	input  logic [1:0] wind,
+	input  logic clk,
+	input  logic reset,
+	input  wind_states_pkg::wind_states_e wind,
 	output logic [2:0] lights
 );
 	// state variables
-	enum { left_light, middle_light, right_light, outside_lights } ps, ns;
+	light_states_pkg::light_states_e ps, ns;
 
 	// output logic
 	always_comb begin
 		case (ps)
-			left_light:     lights = 3'b100;
-			middle_light:   lights = 3'b010;
-			right_light:    lights = 3'b001;
-			outside_lights: lights = 3'b101;
+			light_states_pkg::LEFT:    lights = 3'b100;
+			light_states_pkg::MIDDLE:  lights = 3'b010;
+			light_states_pkg::RIGHT:   lights = 3'b001;
+			light_states_pkg::OUTSIDE: lights = 3'b101;
 		endcase
 	end
-
-	// wind enum to make code more readable
-	enum { calm = 2'b00, left_wind = 2'b01, right_wind = 2'b10 } wind_states;
 
 	// next state logic
 	always_comb begin
 		unique case({ ps, wind })
-			{ left_light,     calm }:       ns = outside_lights;
-			{ left_light,     left_wind }:  ns = right_light;
-			{ left_light,     right_wind }: ns = middle_light;
-			{ middle_light,   calm }:       ns = outside_lights;
-			{ middle_light,   left_wind }:  ns = left_light;
-			{ middle_light,   right_wind }: ns = right_light;
-			{ right_light,    calm }:       ns = outside_lights;
-			{ right_light,    left_wind }:  ns = middle_light;
-			{ right_light,    right_wind }: ns = left_light;
-			{ outside_lights, calm }:       ns = middle_light;
-			{ outside_lights, left_wind }:  ns = left_light;
-			{ outside_lights, right_wind }: ns = right_light;
+			{ light_states_pkg::LEFT,    wind_states_pkg::CALM }:  ns = light_states_pkg::OUTSIDE;
+			{ light_states_pkg::LEFT,    wind_states_pkg::LEFT }:  ns = light_states_pkg::RIGHT;
+			{ light_states_pkg::LEFT,    wind_states_pkg::RIGHT }: ns = light_states_pkg::MIDDLE;
+			{ light_states_pkg::MIDDLE,  wind_states_pkg::CALM }:  ns = light_states_pkg::OUTSIDE;
+			{ light_states_pkg::MIDDLE,  wind_states_pkg::LEFT }:  ns = light_states_pkg::LEFT;
+			{ light_states_pkg::MIDDLE,  wind_states_pkg::RIGHT }: ns = light_states_pkg::RIGHT;
+			{ light_states_pkg::RIGHT,   wind_states_pkg::CALM }:  ns = light_states_pkg::OUTSIDE;
+			{ light_states_pkg::RIGHT,   wind_states_pkg::LEFT }:  ns = light_states_pkg::MIDDLE;
+			{ light_states_pkg::RIGHT,   wind_states_pkg::RIGHT }: ns = light_states_pkg::LEFT;
+			{ light_states_pkg::OUTSIDE, wind_states_pkg::CALM }:  ns = light_states_pkg::MIDDLE;
+			{ light_states_pkg::OUTSIDE, wind_states_pkg::LEFT }:  ns = light_states_pkg::RIGHT;
+			{ light_states_pkg::OUTSIDE, wind_states_pkg::RIGHT }: ns = light_states_pkg::LEFT;
 		endcase
 	end
 
 	// DFFs
 	always_ff @(posedge clk) begin
 		if (reset)
-			ps <= outside_lights;
+			ps <= light_states_pkg::MIDDLE;
 		else
 			ps <= ns;
+	end
+endmodule
+
+
+
+module hazard_lights_testbench();
+	logic       clk, reset;
+	wind_states_pkg::wind_states_e wind;
+	logic [2:0] lights;
+
+	hazard_lights dut (.clk, .reset, .wind, .lights);
+
+	parameter CLOCK_PERIOD = 100;
+
+	initial begin
+		clk <= 0;
+		forever #(CLOCK_PERIOD / 2) clk <= ~clk;
+	end
+
+	initial begin
+			@(posedge clk);
+		reset <= 1; wind <= wind_states_pkg::CALM; @(posedge clk);
+		reset <= 0; @(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+		wind <= wind_states_pkg::LEFT; @(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+		wind <= wind_states_pkg::RIGHT; @(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+			@(posedge clk);
+
+		$stop; // End the simulation.
 	end
 endmodule

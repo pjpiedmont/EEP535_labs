@@ -27,3 +27,40 @@ module ram #(
 			memory[addressRegister] = dataInRegister;
 	end
 endmodule
+
+
+module ram_tb();
+	localparam WIDTH = 4;
+	localparam DEPTH = 32;
+
+	logic [$clog2(DEPTH)-1:0] address;
+	logic [WIDTH-1:0]         dataIn;
+	logic                     writeEnable;
+	logic                     clk;
+	logic [WIDTH-1:0]         dataOut;
+
+	ram #(.WIDTH, .DEPTH) dut(.address, .dataIn, .writeEnable, .clk, .dataOut);
+
+	initial begin
+		clk <= 0;
+		forever #(CLOCK_PERIOD / 2) clk <= ~clk;
+	end
+
+	initial begin
+		@(posedge clk);
+		writeEnable <= 1;
+		
+		int i;
+		for (i = 0; i < DEPTH; i++) begin
+			address <= i;
+			dataIn <= i;
+			@(posedge clk);
+		end
+
+		for (i = 0; i < DEPTH; i++) begin
+			address <= i;
+			@(posedge clk);
+			assert(dataOut == i) else $fatal("Data mismatch at address %0d: expected %0d, got %0d", i, i, dataOut);
+		end
+	end
+endmodule

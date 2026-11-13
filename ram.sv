@@ -51,12 +51,15 @@ module ram_tb();
 		writeEnable <= 1;
 		
 		int i;
+
+		// write to each RAM address
 		for (i = 0; i < DEPTH; i++) begin
 			address <= i;
 			dataIn <= i;
 			@(posedge clk);
 		end
 
+		// read from each RAM address and check the value
 		for (i = 0; i < DEPTH; i++) begin
 			address <= i;
 			@(posedge clk);

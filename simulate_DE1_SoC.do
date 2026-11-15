@@ -8,6 +8,7 @@ vlog "./synchronizer.sv"
 vlog "./edge_detector.sv"
 vlog "./seg7.sv"
 vlog "./counter.sv"
+vlog "./ram32x4port2.v"
 vlog "./DE1_SoC.sv"
 
 # Call vsim to invoke simulator

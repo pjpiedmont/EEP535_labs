@@ -51,6 +51,7 @@ module DE1_SoC_testbench();
 
 	initial begin
 		int i;
+		int failureCount = 0;
 
 		KEY[0] = 1;
 		SW[9] = 1;
@@ -58,7 +59,7 @@ module DE1_SoC_testbench();
 		// write to each RAM address
 		for (i = 0; i < 32; i++) begin
 			SW[8:4] = i;
-			SW[3:0] = i;
+			SW[3:0] = i[3:0];
 
 			#10;
 			KEY[0] = 0;
@@ -78,8 +79,14 @@ module DE1_SoC_testbench();
 
 			#10;
 			KEY[0] = 1;
+
+			assert(dut.ram0.dataOut == i[3:0]) else begin
+				$error("Data mismatch at address %0d: expected %0d, got %0d", i, i[3:0], dut.ram0.dataOut);
+				failureCount++;
+			end
 		end
 
+		$display("%0d of %0d tests failed.", failureCount, 32);
 		$stop;
 	end
 endmodule

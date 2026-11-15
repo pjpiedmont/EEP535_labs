@@ -1,35 +1,39 @@
-module edge_detector(
+module edge_detector #(
+	parameter bit DETECT_RISING_EDGE = 1'b1,
+	parameter bit DETECT_FALLING_EDGE = 1'b0
+)(
 	input  logic clk,
 	input  logic reset,
-	input  logic button,
-	output logic pulse
+	input  logic in,
+	output logic out
 );
-	button_states_pkg::button_states_e ps, ns;
+	typedef enum logic { OFF, ON } state_t;
+	state_t ps, ns;
 
-	// output logic
+	// output logic - Mealy machine
 	always_comb begin
-		unique case ({ ps, button })
-			{ button_states_pkg::OFF, 1'b0 }: pulse = 1'b0;
-			{ button_states_pkg::OFF, 1'b1 }: pulse = 1'b1;
-			{ button_states_pkg::ON,  1'b0 }: pulse = 1'b0;
-			{ button_states_pkg::ON,  1'b1 }: pulse = 1'b0;
+		unique case ({ ps, in })
+			{ OFF, 1'b0 }: out = 1'b0;
+			{ OFF, 1'b1 }: out = 1'b1;
+			{ ON,  1'b0 }: out = 1'b0;
+			{ ON,  1'b1 }: out = 1'b0;
 		endcase
 	end
 
 	// next state logic
 	always_comb begin
-		unique case ({ ps, button })
-			{ button_states_pkg::OFF, 1'b0 }: ns = button_states_pkg::OFF;
-			{ button_states_pkg::OFF, 1'b1 }: ns = button_states_pkg::ON;
-			{ button_states_pkg::ON,  1'b0 }: ns = button_states_pkg::OFF;
-			{ button_states_pkg::ON,  1'b1 }: ns = button_states_pkg::ON;
+		unique case ({ ps, in })
+			{ OFF, 1'b0 }: ns = OFF;
+			{ OFF, 1'b1 }: ns = ON;
+			{ ON,  1'b0 }: ns = OFF;
+			{ ON,  1'b1 }: ns = ON;
 		endcase
 	end
 
 	// DFFs
 	always_ff @(posedge clk) begin
 		if (reset)
-			ps <= button_states_pkg::OFF;
+			ps <= OFF;
 		else
 			ps <= ns;
 	end
@@ -38,9 +42,9 @@ endmodule
 
 
 module edge_detector_testbench();
-	logic clk, reset, button, pulse;
+	logic clk, reset, in, out;
 
-	edge_detector dut(.clk, .reset, .button, .pulse);
+	edge_detector dut(.clk, .reset, .in, .out);
 
 	parameter CLOCK_PERIOD = 100;
 
@@ -51,15 +55,15 @@ module edge_detector_testbench();
 
 	initial begin
 			@(posedge clk);
-		reset <= 1; button <= 0; @(posedge clk);
+		reset <= 1; in <= 0; @(posedge clk);
 			@(posedge clk);
 		
 		// test pulsing the button
-		button <= 1; @(posedge clk);
-		button <= 0; @(posedge clk);
+		in <= 1; @(posedge clk);
+		in <= 0; @(posedge clk);
 
 		// test holding the button
-		button <= 1; repeat(5) @(posedge clk);
-		button <= 0; @(posedge clk);
+		in <= 1; repeat(5) @(posedge clk);
+		in <= 0; @(posedge clk);
 	end
 endmodule

@@ -28,8 +28,8 @@ module DE1_SoC(
 	synchronizer sync2(.clk(clkSelect), .reset, .async_in(KEY[0]), .sync_out(KEY0_sync));
 
 	logic buttonPlayer1, buttonPlayer2;
-	edge_detector ed1(.clk(clkSelect), .reset, .button(~KEY3_sync), .pulse(buttonPlayer1));
-	edge_detector ed2(.clk(clkSelect), .reset, .button(~KEY0_sync), .pulse(buttonPlayer2));
+	edge_detector ed1(.clk(clkSelect), .reset, .in(~KEY3_sync), .out(buttonPlayer1));
+	edge_detector ed2(.clk(clkSelect), .reset, .in(~KEY0_sync), .out(buttonPlayer2));
 
 	logic led1, led2, led3, led4, led5, led6, led7, led8, led9;
 	light light1(.clk(clkSelect), .reset, .leftNeighbor(led2), .rightNeighbor(1'b0), .buttonPlayer1, .buttonPlayer2, .isCenterLight(1'b0), .lightOn(led1));

@@ -2,13 +2,13 @@ onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /DE1_SoC_tb/CLOCK_50
 add wave -noupdate {/DE1_SoC_tb/KEY[3]}
-add wave -noupdate /DE1_SoC_tb/dut/KEY3_sync
-add wave -noupdate /DE1_SoC_tb/dut/reset
 add wave -noupdate {/DE1_SoC_tb/KEY[0]}
-add wave -noupdate /DE1_SoC_tb/dut/KEY0_sync
-add wave -noupdate /DE1_SoC_tb/dut/KEY0_edge
+add wave -noupdate {/DE1_SoC_tb/SW[9]}
+add wave -noupdate /DE1_SoC_tb/HEX5
+add wave -noupdate /DE1_SoC_tb/HEX4
 add wave -noupdate /DE1_SoC_tb/HEX3
 add wave -noupdate /DE1_SoC_tb/HEX2
+add wave -noupdate /DE1_SoC_tb/HEX1
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ps} 0}
 quietly wave cursor active 0

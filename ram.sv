@@ -60,6 +60,8 @@ module ram_tb();
 			@(posedge clk);
 		end
 
+		writeEnable <= 0;
+
 		// read from each RAM address and check the value
 		for (i = 0; i < DEPTH; i++) begin
 			address <= i;

@@ -141,14 +141,23 @@ module DE1_SoC_tb();
 		KEY[3] <= 1;
 		@(posedge CLOCK_50);
 
-// 		KEY[0] = 1;
 		SW[9] = 1;
 
 		// write to each RAM address
 		for (i = 0; i < 32; i++) begin
-			SW[8:4] = i;
-			SW[3:0] = i[3:0];
+			SW[8:4] <= i;
+			SW[3:0] <= i[3:0];
 			@(posedge CLOCK_50);
+		end
+
+		SW[9] <= 0;
+
+		// cycle through read addresses
+		for (i = 0; i < 32; i++) begin
+			KEY[0] <= 0;
+			repeat (2) @(posedge CLOCK_50);
+			KEY[0] <= 1;
+			repeat (2) @(posedge CLOCK_50);
 		end
 
 		// repeat (10) @(posedge CLOCK_50);

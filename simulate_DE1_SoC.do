@@ -4,10 +4,8 @@ vlib work
 # Compile Verilog
 #     All Verilog files that are part of this design should have
 #     their own "vlog" line below.
-vlog "./light_states_pkg.sv"
-vlog "./wind_directions_pkg.sv"
-vlog "./hazard_lights.sv"
-vlog "./clock_divider.sv"
+vlog "./ram.sv"
+vlog "./seg7.sv"
 vlog "./DE1_SoC.sv"
 
 # Call vsim to invoke simulator

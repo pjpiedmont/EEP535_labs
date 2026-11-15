@@ -1,8 +1,8 @@
 module seg7 #(
 	parameter bit ACTIVE_LOW = 1
 )(
-	logic [3:0] digit,
-	logic [6:0] leds
+	input  logic [3:0] digit,
+	output logic [6:0] leds
 );
 	logic [6:0] ledsInternal;
 

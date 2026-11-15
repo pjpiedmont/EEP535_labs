@@ -20,11 +20,11 @@ module DE1_SoC(
 		.dataIn,
 		.writeEnable(SW[9]),
 		.clk,
-		.dataOut,
+		.dataOut
 	);
 
 	// display address on HEX5 and HEX4
-	seg7 seg7_addr_high(digit({{3{1'b0}}, address[4]}), .leds(HEX5));
+	seg7 seg7_addr_high(.digit({{3{1'b0}}, address[4]}), .leds(HEX5));
 	seg7 seg7_addr_low(.digit(address[3:0]), .leds(HEX4));
 
 	// display dataIn on HEX2
@@ -35,6 +35,8 @@ module DE1_SoC(
 
 	assign HEX3 = 7'b1111111;
 	assign HEX1 = 7'b1111111;
+	
+	assign LEDR = 10'b0;
 endmodule
 
 
@@ -50,7 +52,7 @@ module DE1_SoC_testbench();
 	initial begin
 		int i;
 
-		KEY[0] = 0;
+		KEY[0] = 1;
 		SW[9] = 1;
 
 		// write to each RAM address
@@ -59,10 +61,10 @@ module DE1_SoC_testbench();
 			SW[3:0] = i;
 
 			#10;
-			KEY[0] = 1;
+			KEY[0] = 0;
 
 			#10;
-			KEY[0] = 0;
+			KEY[0] = 1;
 		end
 
 		SW[9] = 0;
@@ -72,10 +74,10 @@ module DE1_SoC_testbench();
 			SW[8:4] = i;
 
 			#10;
-			KEY[0] = 1;
+			KEY[0] = 0;
 
 			#10;
-			KEY[0] = 0;
+			KEY[0] = 1;
 		end
 
 		$stop;

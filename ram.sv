@@ -32,6 +32,7 @@ endmodule
 module ram_tb();
 	localparam WIDTH = 4;
 	localparam DEPTH = 32;
+	localparam CLOCK_PERIOD = 100;
 
 	logic [$clog2(DEPTH)-1:0] address;
 	logic [WIDTH-1:0]         dataIn;
@@ -39,7 +40,7 @@ module ram_tb();
 	logic                     clk;
 	logic [WIDTH-1:0]         dataOut;
 
-	ram #(.WIDTH, .DEPTH) dut(.address, .dataIn, .writeEnable, .clk, .dataOut);
+	ram #(.WIDTH(WIDTH), .DEPTH(DEPTH)) dut(.address, .dataIn, .writeEnable, .clk, .dataOut);
 
 	initial begin
 		clk <= 0;
@@ -47,10 +48,10 @@ module ram_tb();
 	end
 
 	initial begin
+		int i;
+		
 		@(posedge clk);
 		writeEnable <= 1;
-		
-		int i;
 
 		// write to each RAM address
 		for (i = 0; i < DEPTH; i++) begin

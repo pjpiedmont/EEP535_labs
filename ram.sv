@@ -49,6 +49,7 @@ module ram_tb();
 
 	initial begin
 		int i;
+		int failureCount = 0;
 		
 		@(posedge clk);
 		writeEnable <= 1;
@@ -56,7 +57,7 @@ module ram_tb();
 		// write to each RAM address
 		for (i = 0; i < DEPTH; i++) begin
 			address <= i;
-			dataIn <= i;
+			dataIn <= i[WIDTH-1:0];
 			@(posedge clk);
 		end
 
@@ -66,7 +67,15 @@ module ram_tb();
 		for (i = 0; i < DEPTH; i++) begin
 			address <= i;
 			@(posedge clk);
-			assert(dataOut == i) else $fatal("Data mismatch at address %0d: expected %0d, got %0d", i, i, dataOut);
+			#1;
+
+			assert(dataOut == i[WIDTH-1:0]) else begin
+				$error("Data mismatch at address %0d: expected %0d, got %0d", i, i[WIDTH-1:0], dataOut);
+				failureCount++;
+			end
 		end
+
+		$display("%0d of %0d tests failed.", failureCount, DEPTH);
+		$stop;
 	end
 endmodule

@@ -1,12 +1,11 @@
 module bit_counter #(
-    parameter  int INPUT_WIDTH = 8,
-    localparam int COUNTER_WIDTH = $clog2(INPUT_WIDTH) + 1
+    parameter int INPUT_WIDTH = 8
 )(
     input  logic clk,
     input  logic reset,
     input  logic start,
     input  logic [INPUT_WIDTH - 1:0] a,
-    output logic [COUNTER_WIDTH - 1:0] count,
+    output logic [$clog2(INPUT_WIDTH):0] count,
     output logic done
 );
     // internal signals
@@ -48,14 +47,13 @@ endmodule
 
 module bit_counter_tb();
     localparam int CLOCK_PERIOD = 100;
-    parameter  int INPUT_WIDTH = 8;
-    localparam int COUNTER_WIDTH = $clog2(INPUT_WIDTH) + 1;
+    parameter int INPUT_WIDTH = 8;
 
     logic clk;
     logic reset;
     logic start;
     logic [INPUT_WIDTH - 1:0] a;
-    logic [COUNTER_WIDTH - 1:0] count;
+    logic [$clog2(INPUT_WIDTH):0] count;
     logic done;
 
     assign a = 8'b0101_0101;

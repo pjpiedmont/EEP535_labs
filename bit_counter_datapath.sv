@@ -1,6 +1,5 @@
 module bit_counter_datapath #(
-    parameter  int INPUT_WIDTH = 8,
-    localparam int COUNTER_WIDTH = $clog2(INPUT_WIDTH) + 1
+    parameter int INPUT_WIDTH = 8
 )(
     input  logic clk,
     input  logic reset,
@@ -16,7 +15,7 @@ module bit_counter_datapath #(
     output logic a_equals_0,
     output logic a0,
 
-    output logic [COUNTER_WIDTH - 1:0] count
+    output logic [$clog2(INPUT_WIDTH):0] count
 );
     logic [INPUT_WIDTH - 1:0] a_reg;
     logic [1:0] shift_register_mode;
@@ -57,8 +56,7 @@ endmodule
 
 module bit_counter_datapath_tb();
     localparam int CLOCK_PERIOD = 100;
-    parameter  int INPUT_WIDTH = 8;
-    localparam int COUNTER_WIDTH = $clog2(INPUT_WIDTH) + 1;
+    parameter int INPUT_WIDTH = 8;
 
     logic clk;
     logic reset;
@@ -69,7 +67,7 @@ module bit_counter_datapath_tb();
     logic right_shift_a;
     logic a_equals_0;
     logic a0;
-    logic [COUNTER_WIDTH - 1:0] count;
+    logic [$clog2(INPUT_WIDTH):0] count;
 
     assign a = 8'b0101_0101;
 

@@ -37,7 +37,7 @@ module bit_counter_controller(
     // output logic
     assign reset_count = (ps == LOAD);
     assign increment_count = (ps == COUNT) & ~a_equals_0 & a0;
-    assign load_a = (ps == LOAD) & ~start;
+    assign load_a = (ps == LOAD);
     assign right_shift_a = (ps == COUNT);
     assign done = (ps == DONE);
 endmodule

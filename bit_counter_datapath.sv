@@ -1,9 +1,9 @@
 module bit_counter_datapath #(
-    parameter int INPUT_WIDTH = 8
+    parameter int WIDTH = 8
 )(
     input  logic clk,
     input  logic reset,
-    input  logic [INPUT_WIDTH - 1:0] a,
+    input  logic [WIDTH - 1:0] a,
 
     // control signals from controller
     input  logic reset_count,
@@ -15,12 +15,12 @@ module bit_counter_datapath #(
     output logic a_equals_0,
     output logic a0,
 
-    output logic [$clog2(INPUT_WIDTH):0] count
+    output logic [$clog2(WIDTH):0] count
 );
-    logic [INPUT_WIDTH - 1:0] a_reg;
+    logic [WIDTH - 1:0] a_reg;
     logic [1:0] shift_register_mode;
 
-    shift_register #(.WIDTH(INPUT_WIDTH)) sr(
+    shift_register #(.WIDTH(WIDTH)) sr(
         .clk,
         .reset,
         .mode(shift_register_mode),
@@ -56,22 +56,22 @@ endmodule
 
 module bit_counter_datapath_tb();
     localparam int CLOCK_PERIOD = 100;
-    parameter int INPUT_WIDTH = 8;
+    parameter int WIDTH = 8;
 
     logic clk;
     logic reset;
-    logic [INPUT_WIDTH - 1:0] a;
+    logic [WIDTH - 1:0] a;
     logic reset_count;
     logic increment_count;
     logic load_a;
     logic right_shift_a;
     logic a_equals_0;
     logic a0;
-    logic [$clog2(INPUT_WIDTH):0] count;
+    logic [$clog2(WIDTH):0] count;
 
     assign a = 8'b0101_0101;
 
-    bit_counter_datapath #(.INPUT_WIDTH(INPUT_WIDTH)) dut(
+    bit_counter_datapath #(.WIDTH(WIDTH)) dut(
         .clk,
         .reset,
         .a,

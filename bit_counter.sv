@@ -65,6 +65,7 @@ module bit_counter_tb();
 
     initial begin
         int i;
+        int failureCount = 0;
 
         reset <= 0;
         start <= 0;
@@ -86,12 +87,16 @@ module bit_counter_tb();
             #1;
 
             assert(done == 1) else $error("Computation did not finish on time.");
-            // assert(count == 4) else $error("Ones count is incorrect. Expected %0d, got %0d.", 4, count);
+            assert(count == $countones(i)) else begin
+                $error("Ones count is incorrect. Expected %0d, got %0d.", $countones(i), count);
+                failureCount++;
+            end
 
             start <= 0;
             @(posedge clk);
         end
 
+        $display("Failed tests: %0d", failureCount);
         $stop;
     end
 endmodule
